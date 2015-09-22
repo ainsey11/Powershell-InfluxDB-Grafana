@@ -10,12 +10,13 @@ $db_found = mysql_select_db($database, $db_handle);
 
 if ($db_found) {
 
-$SQL = "SELECT sensor_value FROM `sensors_state` WHERE sensor_id = 29";
+$SQL = "SELECT message,device_id FROM alerts where time_logged >= DATE(NOW())";
 $result = mysql_query($SQL);
 
 while ( $db_field = mysql_fetch_assoc($result) ) {
 
-print $db_field['sensor_value'];
+print $db_field['Message'];
+print $db_field['device_id'];
 
 }
 
