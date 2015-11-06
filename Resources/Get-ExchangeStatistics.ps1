@@ -1,11 +1,7 @@
-﻿#Connects to Exchange Server
-$Session = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri http://thq-mail01/PowerShell
-Import-PSSession $Session 
-
-# Initialize some variables used for counting and for output 
+﻿# Initialize some variables used for counting and for output 
 $startdate = Get-Date
 $From = $startdate.AddHours(-1)
-$To = $startdate
+$To = $startdate.AddHours(1)
  
 [Int64] $intSent = $intRec = 0
 [Int64] $intSentSize = $intRecSize = 0
@@ -47,6 +43,7 @@ Do
 } 
 While ($To -lt (Get-Date))
 
+Write-Host -ForegroundColor Green $intRecSize
 
 # API funkiness now:
 
@@ -68,9 +65,6 @@ $body.Add('points',$nullpoints)
  
 # Convert to json
 $finalbody = $body | ConvertTo-Json  -Compress
-$finalbody
 
 # Post to API
- Invoke-WebRequest -Uri $global:url -Body ('['+$finalbody+']') -ContentType 'application/json' -Method Post -ErrorAction:Continue
-
-Remove-PSSession $Session
+ Invoke-WebRequest -Uri "http://10.159.25.13:8086/db/DB1/series?u=dash&p=dash" -Body ('['+$finalbody+']') -ContentType 'application/json' -Method Post -ErrorAction:Continue
