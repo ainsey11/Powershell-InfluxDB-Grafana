@@ -1,6 +1,12 @@
+# Gets number of unapproved, undeclined updates from WSUS,then posts to the Dashboard API
 
+# Pull in vars
+$vars = (Get-Item $PSScriptRoot).Parent.FullName + '\vars.ps1'
+Invoke-Expression -Command ($vars)
+
+#gets count from WSUS Server defined in vars
 [void][reflection.assembly]::LoadWithPartialName("Microsoft.UpdateServices.Administration")
-$wsus = [Microsoft.UpdateServices.Administration.AdminProxy]::getUpdateServer(“10.159.25.24”,$False,8530)
+$wsus = [Microsoft.UpdateServices.Administration.AdminProxy]::getUpdateServer(“$global:wsusserver”,$False,$global:wsusserverport)
 $Unapproved = $wsus.GetUpdates() | Where {$_.IsApproved -eq $False -and $_.IsDeclined -eq $False}
 $count = $Unapproved.Count
 
@@ -20,6 +26,6 @@ $body.Add('points',$nullpoints)
 # Convert to json
 $finalbody = $body | ConvertTo-Json  -Compress
 $finalbody
+
 # Post to API
- 
-Invoke-WebRequest -Uri "http://10.159.25.13:8086/db/DB1/series?u=dash&p=dash" -Body ('['+$finalbody+']') -ContentType 'application/json' -Method Post -ErrorAction:Continue
+ Invoke-WebRequest -Uri $global:url -Body ('['+$finalbody+']') -ContentType 'application/json' -Method Post -ErrorAction:Continue
