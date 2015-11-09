@@ -16,8 +16,8 @@ param(
     # Lets do some math for percent
     $MemoryUsed = ($FreeMemory/ $TotalMemory) * 100
     $PercentMemoryUsed = "{0:N2}" -f $MemoryUsed
-    echo "$ComputerCpu"
     
+    Write-Host -ForegroundColor Green "$computername"
     Write-Host -ForegroundColor Green "RAM USed :$PercentMemoryUsed"
     Write-Host -ForegroundColor Green "CPU Used :$ComputerCpu"
 
