@@ -36,8 +36,7 @@ param(
     $finalbody
   # Post to API
  
- Invoke-WebRequest -Uri "http://10.159.25.13:8086/db/DB1/series?u=dash&p=dash" -Body ('['+$finalbody+']') -ContentType 'application/json' -Method Post -ErrorAction:Continue
-}
+ Invoke-WebRequest -Uri "http://10.159.25.13:8086/db/DB1/series?u=dash&p=dash" -Body ('['+$finalbody+']') -ContentType 'application/json' -Method Post -ErrorAction:Continue}
 
 Get-ExchangeResources -computer "thq-mail01"
 Get-ExchangeResources -computer "thq-mail02"
