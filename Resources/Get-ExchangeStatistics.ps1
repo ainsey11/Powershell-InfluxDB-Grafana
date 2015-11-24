@@ -1,4 +1,7 @@
-﻿# Initialize some variables used for counting and for output 
+﻿While ($True){
+ $i++
+
+# Initialize some variables used for counting and for output 
 $startdate = Get-Date
 $From = $startdate.AddHours(-1)
 $To = $startdate.AddHours(1)
@@ -45,6 +48,9 @@ While ($To -lt (Get-Date))
 
 Write-Host -ForegroundColor Green $intRecSize
 
+$NumberofMailboxes = (Get-Mailbox).Count
+$NumberofDistribGroups = (Get-DistributionGroup).Count
+
 # API funkiness now:
 
 [System.Collections.ArrayList]$ExchangeStats = @()
@@ -52,7 +58,9 @@ $ExchangeStats.Add($intsent)
 $ExchangeStats.Add($intsentsize)
 $ExchangeStats.Add($intrec)
 $ExchangeStats.Add($intrecsize)
- 
+$ExchangeStats.Add($NumberofMailboxes)
+$ExchangeStats.Add($NumberofDistribGroups)
+
 # Stick the data points into the null array for required JSON format
 [System.Collections.ArrayList]$nullpoints = @()
 $nullpoints.Add($ExchangeStats)
@@ -60,11 +68,12 @@ $nullpoints.Add($ExchangeStats)
 # Build the post body
 $body = @{}
 $body.Add('name',"exchangestatistics")
-$body.Add('columns',@('Sent', 'sentsize', 'recieved', 'recievedsize'))
+$body.Add('columns',@('Sent', 'sentsize', 'recieved', 'recievedsize', 'NumofMailboxes', 'NumofDistribGroups'))
 $body.Add('points',$nullpoints)
  
 # Convert to json
 $finalbody = $body | ConvertTo-Json  -Compress
 
 # Post to API
- Invoke-WebRequest -Uri "http://10.159.25.13:8086/db/DB1/series?u=dash&p=dash" -Body ('['+$finalbody+']') -ContentType 'application/json' -Method Post -ErrorAction:Continue
+ Invoke-WebRequest -Uri "http://thq-dash01:8086/db/DB1/series?u=dash&p=dash" -Body ('['+$finalbody+']') -ContentType 'application/json' -Method Post -ErrorAction:Continue
+ }
