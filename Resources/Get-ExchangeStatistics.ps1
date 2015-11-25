@@ -53,8 +53,11 @@ $NumberofDistribGroups = (Get-DistributionGroup).Count
 $thqmail01queue = (Get-Queue -Server "thq-mail01" | Get-Message).count
 $thqmail02queue = (Get-Queue -Server "thq-mail02" | Get-Message).count
 $batmail01queue = (Get-Queue -Server "bat-mail01" | Get-Message).count
-$mail01iislogsize = "{0:N2}" -f ((Get-ChildItem -path C:\inetpub\logs\LogFiles\ -recurse | Measure-Object -property length -sum ).sum /1MB)
-$mail02iislogsize = "{0:N2}" -f ((Get-ChildItem -path \\thq-mail02\c$\inetpub\logs\LogFiles\ -recurse | Measure-Object -property length -sum ).sum /1MB)
+$rawmail01iislogsize = "{0:N2}" -f ((Get-ChildItem -path C:\inetpub\logs\LogFiles\ -recurse | Measure-Object -property length -sum ).sum /1MB)
+$rawmail02iislogsize = "{0:N2}" -f ((Get-ChildItem -path \\thq-mail02\c$\inetpub\logs\LogFiles\ -recurse | Measure-Object -property length -sum ).sum /1MB)
+$mail01iislogsize = $rawmail01iislogsize.Replace(",","")
+$mail02iislogsize = $rawmail02iislogsize.Replace(",","")
+
 
 # API funkiness now:
 
