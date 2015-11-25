@@ -50,6 +50,11 @@ Write-Host -ForegroundColor Green $intRecSize
 
 $NumberofMailboxes = (Get-Mailbox).Count
 $NumberofDistribGroups = (Get-DistributionGroup).Count
+$thqmail01queue = (Get-Queue -Server "thq-mail01" | Get-Message).count
+$thqmail02queue = (Get-Queue -Server "thq-mail02" | Get-Message).count
+$batmail01queue = (Get-Queue -Server "bat-mail01" | Get-Message).count
+$mail01iislogsize = "{0:N2}" -f ((Get-ChildItem -path C:\inetpub\logs\LogFiles\ -recurse | Measure-Object -property length -sum ).sum /1MB)
+$mail02iislogsize = "{0:N2}" -f ((Get-ChildItem -path \\thq-mail02\c$\inetpub\logs\LogFiles\ -recurse | Measure-Object -property length -sum ).sum /1MB)
 
 # API funkiness now:
 
@@ -60,6 +65,11 @@ $ExchangeStats.Add($intrec)
 $ExchangeStats.Add($intrecsize)
 $ExchangeStats.Add($NumberofMailboxes)
 $ExchangeStats.Add($NumberofDistribGroups)
+$ExchangeStats.Add($thqmail01queue)
+$ExchangeStats.Add($thqmail02queue)
+$ExchangeStats.Add($batmail01queue)
+$ExchangeStats.Add($mail01iislogsize)
+$ExchangeStats.Add($mail02iislogsize)
 
 # Stick the data points into the null array for required JSON format
 [System.Collections.ArrayList]$nullpoints = @()
@@ -68,7 +78,7 @@ $nullpoints.Add($ExchangeStats)
 # Build the post body
 $body = @{}
 $body.Add('name',"exchangestatistics")
-$body.Add('columns',@('Sent', 'sentsize', 'recieved', 'recievedsize', 'NumofMailboxes', 'NumofDistribGroups'))
+$body.Add('columns',@('Sent', 'sentsize', 'recieved', 'recievedsize', 'NumofMailboxes', 'NumofDistribGroups', 'thqmail01queue','thqmail02queue','batmail01queue','mail01logsize','mail02logsize'))
 $body.Add('points',$nullpoints)
  
 # Convert to json
