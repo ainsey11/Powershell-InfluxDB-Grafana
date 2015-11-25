@@ -1,4 +1,5 @@
-﻿While ($True){
+﻿# To make the script loop for all eternity, unless it erorrs of course
+While ($True){
  $i++
 
 # Initialize some variables used for counting and for output 
@@ -17,6 +18,7 @@ Do
    
  
     $intSent = $intRec = 0 
+    #get the trackinglog results
     (Get-TransportServer -ErrorAction SilentlyContinue -WarningAction SilentlyContinue)  | Get-MessageTrackingLog -ResultSize Unlimited -Start $From -End $To -ErrorAction SilentlyContinue -WarningAction SilentlyContinue| ForEach { 
         # Sent E-mails 
         If ($_.EventId -eq "RECEIVE" -and $_.Source -eq "STOREDRIVER")
@@ -32,13 +34,12 @@ Do
 			$intRecSize += $_.TotalBytes
 		}
     } 
- 
+    # gets mail sizes
  	$intSentSize = [Math]::Round($intSentSize/1MB, 0)
 	$intRecSize = [Math]::Round($intRecSize/1MB, 0)
  
     # Add the numbers to the $strEmails variable and print the result for the day 
     $strEmails += "$intSent,$intSentSize,$intRec,$intRecSize" 
-    $strEmails 
  
     # Increment the From and To by one day 
     $From = $From.AddDays(1) 
@@ -46,21 +47,20 @@ Do
 } 
 While ($To -lt (Get-Date))
 
-Write-Host -ForegroundColor Green $intRecSize
-
-$NumberofMailboxes = (Get-Mailbox).Count
-$NumberofDistribGroups = (Get-DistributionGroup).Count
-$thqmail01queue = (Get-Queue -Server "thq-mail01" | Get-Message).count
-$thqmail02queue = (Get-Queue -Server "thq-mail02" | Get-Message).count
-$batmail01queue = (Get-Queue -Server "bat-mail01" | Get-Message).count
-$rawmail01iislogsize = "{0:N2}" -f ((Get-ChildItem -path C:\inetpub\logs\LogFiles\ -recurse | Measure-Object -property length -sum ).sum /1MB)
-$rawmail02iislogsize = "{0:N2}" -f ((Get-ChildItem -path \\thq-mail02\c$\inetpub\logs\LogFiles\ -recurse | Measure-Object -property length -sum ).sum /1MB)
-$mail01iislogsize = $rawmail01iislogsize.Replace(",","")
-$mail02iislogsize = $rawmail02iislogsize.Replace(",","")
+$NumberofMailboxes = (Get-Mailbox).Count #gets mailbox count
+$NumberofDistribGroups = (Get-DistributionGroup).Count #Gets distribution group count
+$thqmail01queue = (Get-Queue -Server "thq-mail01" | Get-Message).count #Gets mail queue
+$thqmail02queue = (Get-Queue -Server "thq-mail02" | Get-Message).count #Gets mail queue
+$batmail01queue = (Get-Queue -Server "bat-mail01" | Get-Message).count #Gets mail queue
+$rawmail01iislogsize = "{0:N2}" -f ((Get-ChildItem -path C:\inetpub\logs\LogFiles\ -recurse | Measure-Object -property length -sum ).sum /1MB) # gets IIS log folder size
+$rawmail02iislogsize = "{0:N2}" -f ((Get-ChildItem -path \\thq-mail02\c$\inetpub\logs\LogFiles\ -recurse | Measure-Object -property length -sum ).sum /1MB)# gets IIS log folder size
+$mail01iislogsize = $rawmail01iislogsize.Replace(",","") # replaces , from above with nothing
+$mail02iislogsize = $rawmail02iislogsize.Replace(",","") # same I guess
 
 
 # API funkiness now:
 
+#Building the array
 [System.Collections.ArrayList]$ExchangeStats = @()
 $ExchangeStats.Add($intsent)
 $ExchangeStats.Add($intsentsize)
