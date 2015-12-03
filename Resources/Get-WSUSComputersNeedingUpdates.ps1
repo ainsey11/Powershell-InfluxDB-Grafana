@@ -6,7 +6,7 @@ Invoke-Expression -Command ($vars)
 
 #gets count from WSUS Server defined in vars
 [void][reflection.assembly]::LoadWithPartialName("Microsoft.UpdateServices.Administration")
-$wsus = [Microsoft.UpdateServices.Administration.AdminProxy]::getUpdateServer(“$thq-wsus-1”,$False,8530)
+$wsus = [Microsoft.UpdateServices.Administration.AdminProxy]::getUpdateServer(“thq-wsus-1”,$False,"8530")
 $Computersneedingupdates = $wsus.GetUpdateStatus($updatescope,$False)| Select ComputerTargetsneedingUpdatesCount
 
 [System.Collections.ArrayList]$Numberneedingupdates = @()
@@ -27,4 +27,4 @@ $finalbody = $body | ConvertTo-Json  -Compress
 $finalbody
 
 # Post to API
- Invoke-WebRequest -Uri "http://10.159.25.13:8086/db/DB1/series?u=dash&p=dash" -Body ('['+$finalbody+']') -ContentType 'application/json' -Method Post -ErrorAction:Continue
+ Invoke-WebRequest -Uri "http://thq-dash01:8086/db/DB1/series?u=dash&p=dash" -Body ('['+$finalbody+']') -ContentType 'application/json' -Method Post -ErrorAction:Continue
