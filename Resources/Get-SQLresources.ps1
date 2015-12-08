@@ -10,21 +10,18 @@ param(
        
     $cpu = Get-WmiObject win32_processor
     $cpuusage = $cpu.LoadPercentage
-    
     $seriesname = $computer+"resources"
     
     Write-Host -ForegroundColor Green "$computer"
     Write-Host -ForegroundColor Green "RAM Used :$PercentMemoryUsed"
     Write-Host -ForegroundColor Green "CPU Used :$cpuusage"
-
     [System.Collections.ArrayList]$SQLresources = @()
-    $Exchangeresources.Add($PercentMemoryUsed)
-    $Exchangeresources.Add($cpuusage)
+    $SQLresources.Add($PercentMemoryUsed)
+    $SQLresources.Add($cpuusage)
  
     # Stick the data points into the null array for required JSON format
     [System.Collections.ArrayList]$nullpoints = @()
-    $nullpoints.Add($Exchangeresources)
- 
+    $nullpoints.Add($SQLresources)
     # Build the post body
     $body = @{}
     $body.Add('name',"$seriesname")
@@ -36,8 +33,12 @@ param(
     $finalbody
   # Post to API
  
- Invoke-WebRequest -Uri "http://thq-dash01:8086/db/DB1/series?u=dash&p=dash" -Body ('['+$finalbody+']') -ContentType 'application/json' -Method Post -ErrorAction:Continue}
+ Invoke-WebRequest -Uri "http://thq-dash01:8086/db/DB1/series?u=dash&p=dash" -Body ('['+$finalbody+']') -ContentType 'application/json' -Method Post -ErrorAction:Continue
+ }
 
-Get-ExchangeResources -computer "thq-billtest02"
-Get-ExchangeResources -computer "thq-sql01"
-Get-ExchangeResources -computer "thq-sql02"
+While($true) {
+ $i++
+Get-SQLResources -computer "thq-billtest02"
+Get-SQLResources -computer "thq-sql03"
+Get-SQLResources -computer "thq-sql04"
+}
