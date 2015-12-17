@@ -9,7 +9,7 @@
 #
 # ------------------------------------------------------------------------
 
-$disk = Get-WmiObject Win32_LogicalDisk  -Filter "DeviceID='D:'" |
+$disk = Get-WmiObject Win32_LogicalDisk -ComputerName "thq-wsus01" -Filter "DeviceID='E:'" |
 Select-Object FreeSpace
 $space = $Disk.FreeSpace /1GB
 [System.Collections.ArrayList]$FreeSpace = @()
