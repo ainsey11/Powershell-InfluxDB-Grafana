@@ -1,22 +1,26 @@
-﻿# To make the script loop for all eternity, unless it erorrs of course
-While ($True){
- $i++
+﻿# ------------------------------------------------------------------------
+# NAME: Get-ExchangeStatistcs.ps1
+# AUTHOR: Robert Ainsworth
+# WEB : https://ainsey11.com
+#
+#
+# COMMENTS: This script gets mail counts, and mail size from the exchange servers.
+# it then stores in an array, and posts to influxdb's api
+#
+# ------------------------------------------------------------------------
 
 # Initialize some variables used for counting and for output 
 $startdate = Get-Date
 $From = $startdate.AddHours(-1)
 $To = $startdate.AddHours(1)
- 
 [Int64] $intSent = $intRec = 0
 [Int64] $intSentSize = $intRecSize = 0
-[String] $strEmails = $null 
- 
-Do 
+[String] $strEmails = $null
+
+do 
 { 
     # Start building the variable that will hold the information for the day 
     $strEmails = "$($From.DayOfWeek),$($From.ToShortDateString())," 
-   
- 
     $intSent = $intRec = 0 
     #get the trackinglog results
     (Get-TransportServer -ErrorAction SilentlyContinue -WarningAction SilentlyContinue)  | Get-MessageTrackingLog -ResultSize Unlimited -Start $From -End $To -ErrorAction SilentlyContinue -WarningAction SilentlyContinue| ForEach { 
@@ -89,4 +93,3 @@ $finalbody = $body | ConvertTo-Json  -Compress
 
 # Post to API
  Invoke-WebRequest -Uri "http://thq-dash01:8086/db/DB1/series?u=dash&p=dash" -Body ('['+$finalbody+']') -ContentType 'application/json' -Method Post -ErrorAction:Continue
- }
