@@ -5,9 +5,9 @@ $vars = (Get-Item $PSScriptRoot).Parent.FullName + '\vars.ps1'
 Invoke-Expression -Command ($vars)
 
 #gets count from WSUS Server defined in vars
-[void][reflection.assembly]::LoadWithPartialName("Microsoft.UpdateServices.Administration")
-$wsus = [Microsoft.UpdateServices.Administration.AdminProxy]::getUpdateServer(“$global:wsusserver”,$False,$global:wsusserverport)
-$Unapproved = $wsus.GetUpdates() | Where {$_.IsApproved -eq $False -and $_.IsDeclined -eq $False}
+[void][reflection.assembly]::LoadWithPartialName("Microsoft.UpdateServices.Administration") #gets net stuffs
+$wsus = [Microsoft.UpdateServices.Administration.AdminProxy]::getUpdateServer(“$global:wsusserver”,$False,$global:wsusserverport) #connects to server
+$Unapproved = $wsus.GetUpdates() | Where {$_.IsApproved -eq $False -and $_.IsDeclined -eq $False}  #runs check
 $count = $Unapproved.Count
 
 [System.Collections.ArrayList]$NumberUnapproved = @()
