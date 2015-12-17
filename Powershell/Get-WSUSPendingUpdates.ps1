@@ -1,4 +1,11 @@
-# Gets number of unapproved, undeclined updates from WSUS,then posts to the Dashboard API
+# ------------------------------------------------------------------------
+# NAME: Get-WSUSPendingUpdates.ps1
+# AUTHOR: Robert Ainsworth
+# WEB : https://ainsey11.com
+#
+#
+# COMMENTS: Gets number of unapproved, undeclined updates from WSUS,then posts to the Dashboard API
+#
 
 # Pull in vars
 $vars = (Get-Item $PSScriptRoot).Parent.FullName + '\vars.ps1'
