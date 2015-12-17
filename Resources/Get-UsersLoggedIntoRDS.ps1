@@ -1,8 +1,17 @@
-﻿# Pull in vars
+﻿# ------------------------------------------------------------------------
+# NAME: Vars.ps1
+# AUTHOR: Robert Ainsworth
+# WEB : https://ainsey11.com
+#
+#
+# COMMENTS: This script Gets the number of users logged into a single RDS server. 
+#
+# ------------------------------------------------------------------------
+
+
+# Pull in vars
 #$vars = (Get-Item $PSScriptRoot).Parent.FullName + '\vars.ps1'
 #Invoke-Expression -Command ($vars)
-
-
 
 function Get-RDSUsers{
 
@@ -10,14 +19,14 @@ param(
     [CmdletBinding()] 
     [Parameter(ValueFromPipeline=$true,
                ValueFromPipelineByPropertyName=$true)]
-    [string[]]$ComputerName = 'localhost'
+    [string[]]$ComputerName = 'localhost' #sets default computername
 )
 begin {
     $ErrorActionPreference = 'Stop'
 }
 
 process {
-    foreach ($Computer in $ComputerName) {
+    foreach ($Computer in $ComputerName) { # loop here
         try {
             quser /server:$Computer 2>&1 | Select-Object -Skip 1 | ForEach-Object {
                 $CurrentLine = $_.Trim() -Replace '\s+',' ' -Split '\s'
@@ -53,14 +62,14 @@ process {
 }
 }
 
-$SessionCount = (Get-RDSUsers -ComputerName thq-rds01).Count
+$SessionCount = (Get-RDSUsers -ComputerName thq-rds01).Count #Counts and makes into variable
 
 [System.Collections.ArrayList]$RDSUsers = @()
-$RDSUsers.Add($SessionCount)
+$RDSUsers.Add($SessionCount) #adds var into array
  
 # Stick the data points into the null array for required JSON format
-[System.Collections.ArrayList]$nullpoints = @()
-$nullpoints.Add($RDSUsers)
+[System.Collections.ArrayList]$nullpoints = @() #makes null array
+$nullpoints.Add($RDSUsers) #adds it
  
 # Build the post body
 $body = @{}

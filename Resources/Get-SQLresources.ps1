@@ -47,7 +47,7 @@ param(
  
  Invoke-WebRequest -Uri "http://thq-dash01:8086/db/DB1/series?u=dash&p=dash" -Body ('['+$finalbody+']') -ContentType 'application/json' -Method Post -ErrorAction:Continue
  }
- #run function
+#run function
 Get-SQLResources -computer "thq-billtest02"
 Get-SQLResources -computer "thq-sql03"
 Get-SQLResources -computer "thq-sql04"
