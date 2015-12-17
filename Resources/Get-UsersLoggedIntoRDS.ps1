@@ -1,5 +1,5 @@
 ﻿# ------------------------------------------------------------------------
-# NAME: Vars.ps1
+# NAME: Get-UsersLoggedIntoRDS.ps1
 # AUTHOR: Robert Ainsworth
 # WEB : https://ainsey11.com
 #
@@ -22,17 +22,17 @@ param(
     [string[]]$ComputerName = 'localhost' #sets default computername
 )
 begin {
-    $ErrorActionPreference = 'Stop'
+    $ErrorActionPreference = 'Stop' #fancied a bit of error logging
 }
 
-process {
+process { #loopy loop time
     foreach ($Computer in $ComputerName) { # loop here
         try {
             quser /server:$Computer 2>&1 | Select-Object -Skip 1 | ForEach-Object {
                 $CurrentLine = $_.Trim() -Replace '\s+',' ' -Split '\s'
                 $HashProps = @{
                     UserName = $CurrentLine[0]
-                    ComputerName = $Computer
+                    ComputerName = $Computer #Well, duh!
                 }
 
                 # If session is disconnected different fields will be selected
@@ -50,9 +50,9 @@ process {
                         $HashProps.LogonTime = $CurrentLine[5..($CurrentLine.GetUpperBound(0))] -join ' '                }
 
                 New-Object -TypeName PSCustomObject -Property $HashProps |
-                Select-Object -Property UserName,ComputerName,SessionName,Id,State,IdleTime,LogonTime,Error
+                Select-Object -Property UserName,ComputerName,SessionName,Id,State,IdleTime,LogonTime,Error #just so I can pull more info if I want
             }
-        } catch {
+        } catch { #moar logging
             New-Object -TypeName PSCustomObject -Property @{
                 ComputerName = $Computer
                 Error = $_.Exception.Message
