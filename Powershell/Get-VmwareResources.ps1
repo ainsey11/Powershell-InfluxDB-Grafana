@@ -9,6 +9,9 @@
 # and sends it to the API. It also gets the two VDI hosts ram usage and sends it into the API. Quite useful stuff.
 #
 # ------------------------------------------------------------------------
+# Pull in vars
+$vars = (Get-Item $PSScriptRoot).Parent.FullName + '\vars.ps1'
+Invoke-Expression -Command ($vars)
 
 Add-PSSnapin VMware.VimAutomation.Core #Adds the snapin, you must have PowerCLI installed
 Connect-VIServer "thq-vcc01" #ServerName

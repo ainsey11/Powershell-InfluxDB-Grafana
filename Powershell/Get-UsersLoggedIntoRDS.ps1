@@ -7,6 +7,9 @@
 # COMMENTS: This script Gets the number of users logged into a single RDS server. 
 #
 # ------------------------------------------------------------------------
+# Pull in vars
+$vars = (Get-Item $PSScriptRoot).Parent.FullName + '\vars.ps1'
+Invoke-Expression -Command ($vars)
 
 
 # Pull in vars

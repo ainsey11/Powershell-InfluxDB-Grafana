@@ -1,4 +1,8 @@
-﻿function Send-API {
+﻿# Pull in vars
+$vars = (Get-Item $PSScriptRoot).Parent.FullName + '\vars.ps1'
+Invoke-Expression -Command ($vars)
+
+function Send-API {
 
 param ([string] $seriesname),
       ([string] $column)

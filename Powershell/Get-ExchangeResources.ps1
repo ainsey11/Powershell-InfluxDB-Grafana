@@ -9,6 +9,9 @@
 # post it into influxdb / grafana
 #
 # ------------------------------------------------------------------------
+# Pull in vars
+$vars = (Get-Item $PSScriptRoot).Parent.FullName + '\vars.ps1'
+Invoke-Expression -Command ($vars)
 
 Function Get-ExchangeResources{
 param(

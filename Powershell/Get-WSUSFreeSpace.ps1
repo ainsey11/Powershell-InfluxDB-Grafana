@@ -8,6 +8,10 @@
 # the API
 #
 # ------------------------------------------------------------------------
+# Pull in vars
+$vars = (Get-Item $PSScriptRoot).Parent.FullName + '\vars.ps1'
+Invoke-Expression -Command ($vars)
+
 
 $disk = Get-WmiObject Win32_LogicalDisk -ComputerName "thq-wsus01" -Filter "DeviceID='E:'" |
 Select-Object FreeSpace
