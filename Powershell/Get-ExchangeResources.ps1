@@ -50,7 +50,7 @@ param(
     $finalbody = $body | ConvertTo-Json  -Compress
     $finalbody
   # Post to API
-    Invoke-WebRequest -Uri "http://10.159.25.13:8086/db/DB1/series?u=dash&p=dash" -Body ('['+$finalbody+']') -ContentType 'application/json' -Method Post -ErrorAction:Stop
+    Invoke-WebRequest -Uri $global:DashboardServer -Body ('['+$finalbody+']') -ContentType 'application/json' -Method Post -ErrorAction:Stop
 }
 # run the function itself
 

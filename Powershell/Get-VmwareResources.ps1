@@ -49,7 +49,7 @@ $body.Add('points',$nullpoints)
 $finalbody = $body | ConvertTo-Json  -Compress
  
 # Post to API
-Invoke-WebRequest -Uri "http://thq-dash01:8086/db/DB1/series?u=dash&p=dash" -Body ('['+$finalbody+']') -ContentType 'application/json' -Method Post -ErrorAction:Continue
+Invoke-WebRequest -Uri $global:DashboardServer -Body ('['+$finalbody+']') -ContentType 'application/json' -Method Post -ErrorAction:Continue
 Start-Sleep 20 # Dont want to be spamming the vcenter server with requests now do we? lets let it have a little rest for now
 Disconnect-VIServer #Aaaaaaannn Disconnect
 Start-Sleep 5 # bit more of a rest

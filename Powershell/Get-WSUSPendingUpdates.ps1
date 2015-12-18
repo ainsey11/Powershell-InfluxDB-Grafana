@@ -13,7 +13,7 @@ Invoke-Expression -Command ($vars)
 
 #gets count from WSUS Server defined in vars
 [void][reflection.assembly]::LoadWithPartialName("Microsoft.UpdateServices.Administration") #gets net stuffs
-$wsus = [Microsoft.UpdateServices.Administration.AdminProxy]::getUpdateServer(“$global:wsusserver”,$False,$global:wsusserverport) #connects to server
+$wsus = [Microsoft.UpdateServices.Administration.AdminProxy]::getUpdateServer($global:WSUSServer,$False,$global:WSUSServerPort) #connects to server
 $Unapproved = $wsus.GetUpdates() | Where {$_.IsApproved -eq $False -and $_.IsDeclined -eq $False}  #runs check
 $count = $Unapproved.Count
 
@@ -35,4 +35,4 @@ $finalbody = $body | ConvertTo-Json  -Compress
 $finalbody
 
 # Post to API
- Invoke-WebRequest -Uri $global:url -Body ('['+$finalbody+']') -ContentType 'application/json' -Method Post -ErrorAction:Continue
+ Invoke-WebRequest -Uri $global:DashboardServer -Body ('['+$finalbody+']') -ContentType 'application/json' -Method Post -ErrorAction:Continue

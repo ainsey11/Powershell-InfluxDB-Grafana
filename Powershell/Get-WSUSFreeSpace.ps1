@@ -6,14 +6,12 @@
 #
 # COMMENTS: This gets the Wsus Server and sends the amount of free space on he data drive to
 # the API
-#
 # ------------------------------------------------------------------------
 # Pull in vars
 $vars = (Get-Item $PSScriptRoot).Parent.FullName + 'vars.ps1'
 Invoke-Expression -Command ($vars)
 
-
-$disk = Get-WmiObject Win32_LogicalDisk -ComputerName "thq-wsus01" -Filter "DeviceID='E:'" |
+$disk = Get-WmiObject Win32_LogicalDisk -ComputerName $global:WSUSServer -Filter "DeviceID='$global:WSUSServerDataDrive'" |
 Select-Object FreeSpace
 $space = $Disk.FreeSpace /1GB
 [System.Collections.ArrayList]$FreeSpace = @()
@@ -34,4 +32,4 @@ $finalbody = $body | ConvertTo-Json  -Compress
 $finalbody
 
 # Post to API
- Invoke-WebRequest -Uri "http://thq-dash01:8086/db/DB1/series?u=dash&p=dash" -Body ('['+$finalbody+']') -ContentType 'application/json' -Method Post -ErrorAction:Continue
+ Invoke-WebRequest -Uri $global:DashboardServer -Body ('['+$finalbody+']') -ContentType 'application/json' -Method Post -ErrorAction:Continue
