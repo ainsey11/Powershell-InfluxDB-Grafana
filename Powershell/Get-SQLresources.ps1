@@ -9,7 +9,7 @@
 #
 # ------------------------------------------------------------------------
 # Pull in vars
-$vars = (Get-Item $PSScriptRoot).Parent.FullName + '\vars.ps1'
+$vars = (Get-Item $PSScriptRoot).Parent.FullName + 'vars.ps1'
 Invoke-Expression -Command ($vars)
 
 function Get-SQLResources{

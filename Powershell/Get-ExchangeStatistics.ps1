@@ -9,7 +9,7 @@
 #
 # ------------------------------------------------------------------------
 # Pull in vars
-$vars = (Get-Item $PSScriptRoot).Parent.FullName + '\vars.ps1'
+$vars = (Get-Item $PSScriptRoot).Parent.FullName + 'vars.ps1'
 Invoke-Expression -Command ($vars)
 
 # Initialize some variables used for counting and for output 
