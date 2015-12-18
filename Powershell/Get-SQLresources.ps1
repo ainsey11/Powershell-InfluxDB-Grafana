@@ -51,6 +51,6 @@ param(
  Invoke-WebRequest -Uri $global:DashboardServer -Body ('['+$finalbody+']') -ContentType 'application/json' -Method Post -ErrorAction:Continue
  }
 #run function
-Get-SQLResources -computer "thq-billtest02"
-Get-SQLResources -computer "thq-sql03"
-Get-SQLResources -computer "thq-sql04"
+Get-SQLResources -computer $global:SQLServer1
+Get-SQLResources -computer $global:SQLServer2
+Get-SQLResources -computer $global:SQLServer3

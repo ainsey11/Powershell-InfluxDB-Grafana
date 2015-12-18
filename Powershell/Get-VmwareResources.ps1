@@ -14,15 +14,15 @@ $vars = (Get-Item $PSScriptRoot).Parent.FullName + 'vars.ps1'
 Invoke-Expression -Command ($vars)
 
 Add-PSSnapin VMware.VimAutomation.Core #Adds the snapin, you must have PowerCLI installed
-Connect-VIServer "thq-vcc01" #ServerName
+Connect-VIServer $global:VcenterServer #ServerName
 New-VIProperty -Name PercentFree -ObjectType Datastore -Value {"{0:N2}" -f ($args[0].FreeSpaceMB/$args[0].CapacityMB*100)} -Force #does some maths for me
  
 
 $NumberofSMBVDI = (Get-VM -Name "*smb*"| where {$_.Powerstate -eq "PoweredOn"}).count #gets count of VM's
 $NumberofNOCVDI = (Get-VM -Name "*noc*"| where {$_.Powerstate -eq "PoweredOn"}).count #same again, you wizard
-$DatastoreFreeSpace = Get-Datastore -Name "thq-vdi01-01-datastore01" | foreach { $_.PercentFree} #Gets the datastore free space of the one DS I care about
-$Host1MemUsage = Get-Vmhost "thq-vdi01-01.timicogroup.local" #Gets memory usage
-$Host2MemUsage = Get-Vmhost "thq-vdi01-02.timicogroup.local" #gets memory usage
+$DatastoreFreeSpace = Get-Datastore -Name $global:VDIDatastore foreach { $_.PercentFree} #Gets the datastore free space of the one DS I care about
+$Host1MemUsage = Get-Vmhost $global:VDIServer1  #Gets memory usage
+$Host2MemUsage = Get-Vmhost $global:VDIServer2  #gets memory usage
  
 # API funkiness now:
  

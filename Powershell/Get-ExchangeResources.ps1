@@ -54,6 +54,6 @@ param(
 }
 # run the function itself
 
-Get-ExchangeResources -computer "thq-mail01" # run the function itself
-Get-ExchangeResources -computer "thq-mail02" 
-Get-ExchangeResources -computer "bat-mail01"
+Get-ExchangeResources -computer $global:ExchangeServer1 # run the function itself
+Get-ExchangeResources -computer $global:ExchangeServer2
+Get-ExchangeResources -computer $global:ExchangeServer3

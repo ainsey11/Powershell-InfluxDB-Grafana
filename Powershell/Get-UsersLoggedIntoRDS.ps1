@@ -11,18 +11,13 @@
 $vars = (Get-Item $PSScriptRoot).Parent.FullName + 'vars.ps1'
 Invoke-Expression -Command ($vars)
 
-
-# Pull in vars
-#$vars = (Get-Item $PSScriptRoot).Parent.FullName + '\vars.ps1'
-#Invoke-Expression -Command ($vars)
-
 function Get-RDSUsers{
 
 param(
     [CmdletBinding()] 
     [Parameter(ValueFromPipeline=$true,
                ValueFromPipelineByPropertyName=$true)]
-    [string[]]$ComputerName = 'localhost' #sets default computername
+    [string[]]$ComputerName = $global:RDSServer #sets default computername
 )
 begin {
     $ErrorActionPreference = 'Stop' #fancied a bit of error logging
@@ -65,7 +60,7 @@ process { #loopy loop time
 }
 }
 
-$SessionCount = (Get-RDSUsers -ComputerName thq-rds01).Count #Counts and makes into variable
+$SessionCount = (Get-RDSUsers -ComputerName $global:RDSServer).Count #Counts and makes into variable
 
 [System.Collections.ArrayList]$RDSUsers = @()
 $RDSUsers.Add($SessionCount) #adds var into array
