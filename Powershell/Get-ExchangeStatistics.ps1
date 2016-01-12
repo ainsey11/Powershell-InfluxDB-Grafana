@@ -9,6 +9,10 @@
 #
 # ------------------------------------------------------------------------
 # Pull in vars
+
+$session = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri http://thq-mail01.timicogroup.local/powershell
+Import-PSSession $session
+
 $vars = (Get-Item $PSScriptRoot).Parent.FullName + 'vars.ps1'
 Invoke-Expression -Command ($vars)
 
@@ -68,7 +72,7 @@ $mail02iislogsize = $rawmail02iislogsize.Replace(",","") # same I guess
 # API funkiness now:
 
 #Building the array
-[System.Collections.ArrayList]$ExchangeStats = @()
+[System.Collections.ArrayList]$ExchangeStats = @()----
 $ExchangeStats.Add($intsent)
 $ExchangeStats.Add($intsentsize)
 $ExchangeStats.Add($intrec)
