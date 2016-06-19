@@ -10,7 +10,7 @@
 # ------------------------------------------------------------------------
 # Pull in vars
 
-$session = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri http://thq-mail01.timicogroup.local/powershell
+$session = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri http://#/powershell
 Import-PSSession $session
 
 $vars = (Get-Item $PSScriptRoot).Parent.FullName + 'vars.ps1'
@@ -64,7 +64,7 @@ $thqmail01queue = (Get-Queue -Server "thq-mail01" | Get-Message).count #Gets mai
 $thqmail02queue = (Get-Queue -Server "thq-mail02" | Get-Message).count #Gets mail queue
 $batmail01queue = (Get-Queue -Server "bat-mail01" | Get-Message).count #Gets mail queue
 $rawmail01iislogsize = "{0:N2}" -f ((Get-ChildItem -path C:\inetpub\logs\LogFiles\ -recurse | Measure-Object -property length -sum ).sum /1MB) # gets IIS log folder size
-$rawmail02iislogsize = "{0:N2}" -f ((Get-ChildItem -path \\thq-mail02\c$\inetpub\logs\LogFiles\ -recurse | Measure-Object -property length -sum ).sum /1MB)# gets IIS log folder size
+$rawmail02iislogsize = "{0:N2}" -f ((Get-ChildItem -path C:\#\c$\inetpub\logs\LogFiles\ -recurse | Measure-Object -property length -sum ).sum /1MB)# gets IIS log folder size
 $mail01iislogsize = $rawmail01iislogsize.Replace(",","") # replaces , from above with nothing
 $mail02iislogsize = $rawmail02iislogsize.Replace(",","") # same I guess
 

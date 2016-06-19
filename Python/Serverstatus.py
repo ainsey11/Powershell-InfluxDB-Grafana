@@ -25,7 +25,7 @@ while True:
 	          }
 		]
 	        
-		client = InfluxDBClient('10.159.25.13', 8086, 'dash', 'dash', 'DB2')
+		client = InfluxDBClient('#', 8086, 'dash', 'dash', 'DB2')
 		client.write_points(status_json)
 		print "Data sent to database for:"
 		print name

@@ -18,8 +18,8 @@ Connect-VIServer $global:VcenterServer #ServerName
 New-VIProperty -Name PercentFree -ObjectType Datastore -Value {"{0:N2}" -f ($args[0].FreeSpaceMB/$args[0].CapacityMB*100)} -Force #does some maths for me
  
 
-$NumberofSMBVDI = (Get-VM -Name "*smb*"| where {$_.Powerstate -eq "PoweredOn"}).count #gets count of VM's
-$NumberofNOCVDI = (Get-VM -Name "*noc*"| where {$_.Powerstate -eq "PoweredOn"}).count #same again, you wizard
+$NumberofSMBVDI = (Get-VM -Name "*#*"| where {$_.Powerstate -eq "PoweredOn"}).count #gets count of VM's
+$NumberofNOCVDI = (Get-VM -Name "*#*"| where {$_.Powerstate -eq "PoweredOn"}).count #same again, you wizard
 $DatastoreFreeSpace = Get-Datastore -Name $global:VDIDatastore foreach { $_.PercentFree} #Gets the datastore free space of the one DS I care about
 $Host1MemUsage = Get-Vmhost $global:VDIServer1  #Gets memory usage
 $Host2MemUsage = Get-Vmhost $global:VDIServer2  #gets memory usage

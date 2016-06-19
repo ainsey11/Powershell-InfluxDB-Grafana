@@ -1,3 +1,0 @@
-DAG Status to API
-SQL Server client connections? Bottom row - screen 3?
-WSUS Disk Space
